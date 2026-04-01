@@ -3,7 +3,7 @@
 
 ## Team Info
 - 22471A05XX — **Name** ( [LinkedIn](https://linkedin.com/in/xxxxxxxxxx) )
-_Work Done: xxxxxxxxxx_
+_Work Done: - **Role & Contribution:** Machine Learning & Modeling Lead. Responsible for designing, training, and evaluating the loan prediction model. Worked on feature selection, algorithm selection (LightGBM), model tuning, threshold optimization, and performance evaluation to ensure accurate risk classification.
 
 - 22471A05XX — **Name** ( [LinkedIn](https://linkedin.com/in/xxxxxxxxxx) )
 _Work Done: xxxxxxxxxx_
