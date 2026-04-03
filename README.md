@@ -7,12 +7,15 @@ A machine learning–based system for **automated binary classification of loan 
 ## 👥 Team Information
 
 ### Siddi Venkatesh
+- LinkedIn : https://www.linkedin.com/in/siddi-venkatesh-5689a4319/
 - **Role & Contribution:** Machine Learning & Modeling Lead. Responsible for designing, training, and evaluating the loan prediction model. Worked on feature selection, algorithm selection (LightGBM), model tuning, threshold optimization, and performance evaluation to ensure accurate risk classification.
 
 ### Pokala Appaiah
+- LinkedIn : https://www.linkedin.com/in/appaiahnaidu-pokala-27799a282?utm_source=share_via&utm_content=profile&utm_medium=member_android
 - **Role & Contribution:** Data Processing & Backend Lead. Handled data cleaning, preprocessing, and dataset preparation for the loan prediction system. Implemented backend logic for model integration, data flow, batch prediction handling, and Flask API development.
 
 ### Pallothu Venkata Sai Krishna
+- LinkedIn : https://www.linkedin.com/in/sai-krishna-4529a0282
 - **Role & Contribution:** Frontend & System Integration Lead. Developed the user interface and integrated the trained model into the web application. Focused on form inputs, result visualization, dashboard design, and clear risk-status output to make the system usable and understandable.
 
 ---
