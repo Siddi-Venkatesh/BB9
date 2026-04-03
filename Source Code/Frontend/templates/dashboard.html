@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Batch Prediction Dashboard - Loan Risk Prediction</title>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-teal: #0d4f54;
+            --accent-cyan: #5dd9d0;
+            --bright-cyan: #7ffff8;
+            --dark-bg: #0a3438;
+            --text-light: #ffffff;
+            --text-muted: #c0e8e6;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: linear-gradient(135deg, var(--dark-bg) 0%, var(--primary-teal) 100%);
+            color: var(--text-light);
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* Background */
+        .background-decoration {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .floating-orb {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, rgba(93, 217, 208, 0.2), transparent);
+            filter: blur(60px);
+            animation: float 25s infinite ease-in-out;
+        }
+
+        .orb-1 {
+            width: 500px;
+            height: 500px;
+            top: -150px;
+            right: -150px;
+        }
+
+        .orb-2 {
+            width: 400px;
+            height: 400px;
+            bottom: -100px;
+            left: -100px;
+            animation-delay: 8s;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translate(0, 0) scale(1);
+                opacity: 0.4;
+            }
+            50% {
+                transform: translate(50px, -50px) scale(1.1);
+                opacity: 0.6;
+            }
+        }
+
+        /* Header */
+        header {
+            position: relative;
+            z-index: 100;
+            padding: 2rem 4rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            animation: slideDown 0.8s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .logo {
+            font-family: 'Syne', sans-serif;
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--bright-cyan);
+            text-shadow: 0 0 30px rgba(127, 255, 248, 0.3);
+            text-decoration: none;
+        }
+
+        nav {
+            display: flex;
+            align-items: center;
+            gap: 3rem;
+        }
+
+        .nav-link {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent-cyan);
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: var(--bright-cyan);
+        }
+
+        .nav-link:hover::after,
+        .nav-link.active::after {
+            width: 100%;
+        }
+
+        /* Container */
+        .container {
+            position: relative;
+            z-index: 10;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 3rem 2rem 6rem;
+        }
+
+        /* Page Header */
+        .page-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .page-title {
+            font-family: 'Syne', sans-serif;
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            color: var(--bright-cyan);
+            text-shadow: 0 0 30px rgba(127, 255, 248, 0.3);
+        }
+
+        .page-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+        }
+
+        /* Upload Section */
+        .upload-section {
+            background: rgba(13, 79, 84, 0.3);
+            backdrop-filter: blur(10px);
+            border: 2px dashed rgba(93, 217, 208, 0.3);
+            border-radius: 20px;
+            padding: 3rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .upload-section:hover {
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 30px rgba(93, 217, 208, 0.2);
+        }
+
+        .upload-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        .upload-title {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.8rem;
+            color: var(--bright-cyan);
+            margin-bottom: 1rem;
+        }
+
+        .upload-description {
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+        }
+
+        .file-input-wrapper {
+            position: relative;
+            display: inline-block;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .file-input-label {
+            padding: 1rem 2.5rem;
+            background: var(--accent-cyan);
+            color: var(--dark-bg);
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            display: inline-block;
+        }
+
+        .file-input-label:hover {
+            background: var(--bright-cyan);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(93, 217, 208, 0.4);
+        }
+
+        .file-name {
+            margin-top: 1rem;
+            color: var(--accent-cyan);
+            font-weight: 600;
+        }
+
+        /* Progress Section */
+        .progress-section {
+            background: rgba(13, 79, 84, 0.3);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(93, 217, 208, 0.2);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            display: none;
+        }
+
+        .progress-section.active {
+            display: block;
+        }
+
+        .progress-title {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.5rem;
+            color: var(--bright-cyan);
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .progress-bar-container {
+            width: 100%;
+            height: 40px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 20px;
+            overflow: hidden;
+            margin-bottom: 1rem;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-cyan), var(--bright-cyan));
+            border-radius: 20px;
+            transition: width 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: var(--dark-bg);
+        }
+
+        .progress-stats {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 1.5rem;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-family: 'Syne', sans-serif;
+            font-size: 2rem;
+            color: var(--bright-cyan);
+            font-weight: 800;
+        }
+
+        .stat-label {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* Results Section */
+        .results-section {
+            background: rgba(13, 79, 84, 0.3);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(93, 217, 208, 0.2);
+            border-radius: 20px;
+            padding: 2rem;
+            display: none;
+        }
+
+        .results-section.active {
+            display: block;
+        }
+
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .results-title {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.8rem;
+            color: var(--bright-cyan);
+        }
+
+        .download-btn {
+            padding: 1rem 2rem;
+            background: var(--accent-cyan);
+            color: var(--dark-bg);
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.4s ease;
+        }
+
+        .download-btn:hover {
+            background: var(--bright-cyan);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(93, 217, 208, 0.4);
+        }
+
+        .table-container {
+            overflow-x: auto;
+            border-radius: 15px;
+            background: rgba(0, 0, 0, 0.3);
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+        }
+
+        thead {
+            background: rgba(93, 217, 208, 0.2);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        th {
+            padding: 1rem 0.8rem;
+            text-align: left;
+            font-weight: 700;
+            color: var(--bright-cyan);
+            border-bottom: 2px solid var(--accent-cyan);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-size: 0.7rem;
+            white-space: nowrap;
+        }
+
+        td {
+            padding: 0.8rem;
+            border-bottom: 1px solid rgba(93, 217, 208, 0.1);
+            color: var(--text-muted);
+        }
+
+        tbody tr:hover {
+            background: rgba(93, 217, 208, 0.1);
+        }
+
+        .status-badge {
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .status-low-risk {
+            background: rgba(34, 197, 94, 0.2);
+            color: #22c55e;
+        }
+
+        .status-high-risk {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            header {
+                padding: 1.5rem;
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .container {
+                padding: 2rem 1rem 4rem;
+            }
+
+            .page-title {
+                font-size: 2rem;
+            }
+
+            .upload-section {
+                padding: 2rem 1rem;
+            }
+
+            .results-header {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="background-decoration">
+        <div class="floating-orb orb-1"></div>
+        <div class="floating-orb orb-2"></div>
+    </div>
+
+    <!-- Header -->
+    <header>
+        <a href="/home" class="logo">ML Research</a>
+        <nav>
+            <a href="/home" class="nav-link">Home</a>
+            <a href="/dataset" class="nav-link">Dataset</a>
+            <a href="/aboutus" class="nav-link">About Us</a>
+            <a href="/predictloan" class="nav-link">Predict Loan</a>
+            <a href="/dashboard" class="nav-link active">Dashboard</a>
+            <a href="/predictresult" class="nav-link">Prediction Results</a>
+            <a href="/contactus" class="nav-link">Contact Us</a>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1 class="page-title">Batch Prediction Dashboard</h1>
+            <p class="page-subtitle">Upload a CSV file to predict loan risk for multiple applications at once</p>
+        </div>
+
+        <!-- Upload Section -->
+        <div class="upload-section">
+            <div class="upload-icon">📊</div>
+            <h2 class="upload-title">Upload CSV File</h2>
+            <p class="upload-description">
+                Select a CSV file containing loan applications. The system will automatically predict risk for each row.
+            </p>
+            <div class="file-input-wrapper">
+                <input type="file" id="csvFile" class="file-input" accept=".csv" onchange="handleFileSelect(event)">
+                <label for="csvFile" class="file-input-label">📁 Choose CSV File</label>
+            </div>
+            <div class="file-name" id="fileName"></div>
+        </div>
+
+        <!-- Progress Section -->
+        <div class="progress-section" id="progressSection">
+            <h3 class="progress-title">Processing Predictions...</h3>
+            <div class="progress-bar-container">
+                <div class="progress-bar" id="progressBar" style="width: 0%">0%</div>
+            </div>
+            <div class="progress-stats">
+                <div class="stat">
+                    <div class="stat-value" id="processedCount">0</div>
+                    <div class="stat-label">Processed</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value" id="totalCount">0</div>
+                    <div class="stat-label">Total Rows</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value" id="lowRiskCount">0</div>
+                    <div class="stat-label">Low Risk</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value" id="highRiskCount">0</div>
+                    <div class="stat-label">High Risk</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results Section -->
+        <div class="results-section" id="resultsSection">
+            <div class="results-header">
+                <h3 class="results-title">Prediction Results</h3>
+                <button class="download-btn" onclick="downloadResults()">📥 Download Results CSV</button>
+            </div>
+            <div class="table-container">
+                <table id="resultsTable">
+                    <thead id="tableHead"></thead>
+                    <tbody id="tableBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    let statusInterval;
+
+    function handleFileSelect(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        if (!file.name.endsWith('.csv')) {
+            alert('Please select a CSV file');
+            return;
+        }
+
+        document.getElementById('fileName').textContent = `Selected: ${file.name} (${(file.size / 1024 / 1024).toFixed(2)} MB)`;
+
+        // Upload file
+        uploadFile(file);
+    }
+
+    async function uploadFile(file) {
+        const formData = new FormData();
+        formData.append('file', file);
+
+        try {
+            // Show progress section
+            document.getElementById('progressSection').classList.add('active');
+            document.getElementById('progressBar').style.width = '0%';
+            document.getElementById('progressBar').textContent = 'Uploading...';
+
+            const response = await fetch('/upload_csv', {
+                method: 'POST',
+                body: formData
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+                // Start polling for status
+                startStatusPolling();
+            } else {
+                alert('Upload failed: ' + result.error);
+                document.getElementById('progressSection').classList.remove('active');
+            }
+        } catch (error) {
+            console.error('Upload error:', error);
+            alert('Upload failed. Please try again.');
+            document.getElementById('progressSection').classList.remove('active');
+        }
+    }
+
+    function startStatusPolling() {
+        // Poll every 500ms
+        statusInterval = setInterval(async () => {
+            try {
+                const response = await fetch('/processing_status');
+                const status = await response.json();
+
+                // Update UI
+                updateProgress(status);
+
+                // Check if complete
+                if (status.complete) {
+                    clearInterval(statusInterval);
+                    
+                    if (status.file_path) {
+                        showResults(status);
+                    } else if (status.error) {
+                        alert('Processing error: ' + status.error);
+                        document.getElementById('progressSection').classList.remove('active');
+                    }
+                }
+            } catch (error) {
+                console.error('Status check error:', error);
+            }
+        }, 500);
+    }
+
+    function updateProgress(status) {
+        const progress = status.total > 0 ? (status.processed / status.total) * 100 : 0;
+        
+        document.getElementById('progressBar').style.width = progress + '%';
+        document.getElementById('progressBar').textContent = Math.round(progress) + '%';
+        document.getElementById('totalCount').textContent = status.total.toLocaleString();
+        document.getElementById('processedCount').textContent = status.processed.toLocaleString();
+        document.getElementById('lowRiskCount').textContent = status.low_risk.toLocaleString();
+        document.getElementById('highRiskCount').textContent = status.high_risk.toLocaleString();
+    }
+
+    function showResults(status) {
+        document.getElementById('resultsSection').classList.add('active');
+        
+        const filename = status.file_path;
+        
+        // Show summary in table
+        const tableHead = document.getElementById('tableHead');
+        const tableBody = document.getElementById('tableBody');
+
+        tableHead.innerHTML = `
+            <tr>
+                <th>Metric</th>
+                <th>Value</th>
+            </tr>
+        `;
+
+        const lowRiskPercent = ((status.low_risk / status.total) * 100).toFixed(1);
+        const highRiskPercent = ((status.high_risk / status.total) * 100).toFixed(1);
+
+        tableBody.innerHTML = `
+            <tr>
+                <td><strong>Total Rows Processed</strong></td>
+                <td>${status.total.toLocaleString()}</td>
+            </tr>
+            <tr>
+                <td><strong>Low Risk Predictions</strong></td>
+                <td><span class="status-badge status-low-risk">${status.low_risk.toLocaleString()} (${lowRiskPercent}%)</span></td>
+            </tr>
+            <tr>
+                <td><strong>High Risk Predictions</strong></td>
+                <td><span class="status-badge status-high-risk">${status.high_risk.toLocaleString()} (${highRiskPercent}%)</span></td>
+            </tr>
+            <tr>
+                <td><strong>Status</strong></td>
+                <td><span style="color: #22c55e; font-weight: 700;">✅ Processing Complete!</span></td>
+            </tr>
+            <tr>
+                <td colspan="2" style="text-align: center; padding-top: 1.5rem;">
+                    <strong style="color: var(--bright-cyan);">Click "Download Results CSV" button above to get your predictions</strong>
+                </td>
+            </tr>
+        `;
+
+        // Update download button
+        const downloadBtn = document.querySelector('.download-btn');
+        downloadBtn.onclick = () => {
+            window.location.href = `/download_predictions/${filename}`;
+        };
+    }
+
+    function downloadResults() {
+        // This will be updated dynamically when results are ready
+        alert('Please wait for processing to complete');
+    }
+</script>
+</body>
+</html>

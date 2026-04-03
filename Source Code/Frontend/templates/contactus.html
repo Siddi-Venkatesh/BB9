@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - Machine Learning Research</title>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-teal: #0d4f54;
+            --accent-cyan: #5dd9d0;
+            --bright-cyan: #7ffff8;
+            --dark-bg: #0a3438;
+            --text-light: #ffffff;
+            --text-muted: #c0e8e6;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: linear-gradient(135deg, var(--dark-bg) 0%, var(--primary-teal) 100%);
+            color: var(--text-light);
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* Background */
+        .background-decoration {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .floating-orb {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, rgba(93, 217, 208, 0.2), transparent);
+            filter: blur(60px);
+            animation: float 25s infinite ease-in-out;
+        }
+
+        .orb-1 {
+            width: 500px;
+            height: 500px;
+            top: -150px;
+            right: -150px;
+        }
+
+        .orb-2 {
+            width: 400px;
+            height: 400px;
+            bottom: -100px;
+            left: -100px;
+            animation-delay: 8s;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translate(0, 0) scale(1);
+                opacity: 0.4;
+            }
+            50% {
+                transform: translate(50px, -50px) scale(1.1);
+                opacity: 0.6;
+            }
+        }
+
+        /* Header */
+        header {
+            position: relative;
+            z-index: 100;
+            padding: 2rem 4rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            animation: slideDown 0.8s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .logo {
+            font-family: 'Syne', sans-serif;
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--bright-cyan);
+            text-shadow: 0 0 30px rgba(127, 255, 248, 0.3);
+            text-decoration: none;
+        }
+
+        nav {
+            display: flex;
+            align-items: center;
+            gap: 3rem;
+        }
+
+        .nav-link {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent-cyan);
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: var(--bright-cyan);
+        }
+
+        .nav-link:hover::after,
+        .nav-link.active::after {
+            width: 100%;
+        }
+
+        /* Container */
+        .container {
+            position: relative;
+            z-index: 10;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 3rem 4rem 6rem;
+        }
+
+        /* Page Header */
+        .page-header {
+            text-align: center;
+            margin-bottom: 5rem;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .page-badge {
+            display: inline-block;
+            padding: 0.5rem 1.5rem;
+            background: rgba(93, 217, 208, 0.2);
+            border: 1px solid var(--accent-cyan);
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--bright-cyan);
+            margin-bottom: 2rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                box-shadow: 0 0 0 0 rgba(93, 217, 208, 0.4);
+            }
+            50% {
+                box-shadow: 0 0 0 10px rgba(93, 217, 208, 0);
+            }
+        }
+
+        .page-title {
+            font-family: 'Syne', sans-serif;
+            font-size: 4rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            color: var(--bright-cyan);
+            text-shadow: 0 0 30px rgba(127, 255, 248, 0.3);
+            animation: glow 3s ease-in-out infinite;
+        }
+
+        @keyframes glow {
+            0%, 100% {
+                text-shadow: 0 0 20px rgba(127, 255, 248, 0.3);
+            }
+            50% {
+                text-shadow: 0 0 40px rgba(127, 255, 248, 0.6);
+            }
+        }
+
+        .page-subtitle {
+            font-size: 1.4rem;
+            color: var(--text-muted);
+            max-width: 900px;
+            margin: 0 auto;
+            line-height: 1.7;
+        }
+
+        /* Contact Layout */
+        .contact-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            margin-bottom: 4rem;
+            animation: fadeIn 0.8s ease-out both;
+            animation-delay: 0.2s;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Contact Form */
+        .contact-form {
+            background: rgba(13, 79, 84, 0.3);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(93, 217, 208, 0.2);
+            border-radius: 20px;
+            padding: 3rem;
+            transition: all 0.3s ease;
+        }
+
+        .contact-form:hover {
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 30px rgba(93, 217, 208, 0.2);
+        }
+
+        .form-title {
+            font-family: 'Syne', sans-serif;
+            font-size: 2rem;
+            color: var(--bright-cyan);
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            color: var(--accent-cyan);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        .form-input,
+        .form-select,
+        .form-textarea {
+            width: 100%;
+            padding: 1rem 1.5rem;
+            background: rgba(10, 52, 56, 0.5);
+            border: 1px solid rgba(93, 217, 208, 0.3);
+            border-radius: 10px;
+            color: var(--text-light);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus,
+        .form-select:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 20px rgba(93, 217, 208, 0.2);
+            background: rgba(10, 52, 56, 0.7);
+        }
+
+        .form-input::placeholder,
+        .form-textarea::placeholder {
+            color: var(--text-muted);
+            opacity: 0.6;
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 150px;
+        }
+
+        .form-select {
+            cursor: pointer;
+        }
+
+        .form-select option {
+            background: var(--dark-bg);
+            color: var(--text-light);
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 1.2rem 2rem;
+            background: linear-gradient(135deg, var(--accent-cyan), var(--bright-cyan));
+            border: none;
+            border-radius: 10px;
+            color: var(--dark-bg);
+            font-family: 'Syne', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(93, 217, 208, 0.4);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Contact Info */
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .info-card {
+            background: rgba(13, 79, 84, 0.3);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(93, 217, 208, 0.2);
+            border-radius: 20px;
+            padding: 2.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .info-card:hover {
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 30px rgba(93, 217, 208, 0.2);
+            transform: translateY(-5px);
+        }
+
+        .info-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .info-title {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.5rem;
+            color: var(--bright-cyan);
+            margin-bottom: 1rem;
+        }
+
+        .info-text {
+            color: var(--text-muted);
+            line-height: 1.6;
+            font-size: 1rem;
+        }
+
+        .info-link {
+            color: var(--accent-cyan);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .info-link:hover {
+            color: var(--bright-cyan);
+        }
+
+        /* Social Links */
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .social-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(93, 217, 208, 0.2);
+            border: 1px solid var(--accent-cyan);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent-cyan);
+            font-size: 1.5rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .social-btn:hover {
+            background: var(--accent-cyan);
+            color: var(--dark-bg);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 20px rgba(93, 217, 208, 0.3);
+        }
+
+        /* FAQ Section */
+        .faq-section {
+            margin-top: 4rem;
+            animation: fadeIn 0.8s ease-out both;
+            animation-delay: 0.4s;
+        }
+
+        .section-title {
+            font-family: 'Syne', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            color: var(--bright-cyan);
+            text-align: center;
+        }
+
+        .faq-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .faq-item {
+            background: rgba(13, 79, 84, 0.3);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(93, 217, 208, 0.2);
+            border-radius: 15px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .faq-item:hover {
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 30px rgba(93, 217, 208, 0.2);
+        }
+
+        .faq-question {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.2rem;
+            color: var(--accent-cyan);
+            margin-bottom: 1rem;
+        }
+
+        .faq-answer {
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        /* Success Message */
+        .success-message {
+            display: none;
+            background: rgba(93, 217, 208, 0.2);
+            border: 1px solid var(--accent-cyan);
+            border-radius: 10px;
+            padding: 1rem 1.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--bright-cyan);
+            text-align: center;
+        }
+
+        .success-message.show {
+            display: block;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 968px) {
+            .contact-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            header {
+                padding: 1.5rem 2rem;
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+
+            nav {
+                gap: 1.5rem;
+            }
+
+            .container {
+                padding: 2rem 1.5rem 4rem;
+            }
+
+            .page-title {
+                font-size: 2.5rem;
+            }
+
+            .page-subtitle {
+                font-size: 1.1rem;
+            }
+
+            .contact-form,
+            .info-card {
+                padding: 2rem;
+            }
+
+            .faq-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background Decoration -->
+    <div class="background-decoration">
+        <div class="floating-orb orb-1"></div>
+        <div class="floating-orb orb-2"></div>
+    </div>
+
+    <!-- Header -->
+    <header>
+        <a href="#" class="logo">ML Research</a>
+        <nav>
+            <a href="/home" class="nav-link">Home</a>
+            <a href="/dataset" class="nav-link">Dataset</a>
+            <a href="/aboutus" class="nav-link">About Us</a>
+            <a href="/predictloan" class="nav-link">Predict Loan</a>
+            <a href="/dashboard" class="nav-link active">Dashboard</a>
+            <a href="/predictresult" class="nav-link">Prediction Results</a>
+            <a href="/contactus" class="nav-link">Contact Us</a>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Page Header -->
+        <div class="page-header">
+            <span class="page-badge">Get In Touch</span>
+            <h1 class="page-title">Contact Us</h1>
+            <p class="page-subtitle">
+                Have questions about our datasets or research? We'd love to hear from you. Reach out to our team and we'll get back to you as soon as possible.
+            </p>
+        </div>
+
+        <!-- Contact Layout -->
+        <div class="contact-layout">
+            <!-- Contact Form -->
+            <div class="contact-form">
+                <h2 class="form-title">Send us a Message</h2>
+                
+                <div class="success-message" id="successMessage">
+                    ✓ Thank you! Your message has been sent successfully.
+                </div>
+
+                <form id="contactForm">
+                    <div class="form-group">
+                        <label class="form-label" for="name">Full Name *</label>
+                        <input 
+                            type="text" 
+                            id="name" 
+                            class="form-input" 
+                            placeholder="Enter your full name"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="email">Email Address *</label>
+                        <input 
+                            type="email" 
+                            id="email" 
+                            class="form-input" 
+                            placeholder="your.email@example.com"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="subject">Subject *</label>
+                        <select id="subject" class="form-select" required>
+                            <option value="">Select a subject</option>
+                            <option value="dataset">Dataset Inquiry</option>
+                            <option value="research">Research Collaboration</option>
+                            <option value="technical">Technical Support</option>
+                            <option value="partnership">Partnership Opportunity</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="message">Message *</label>
+                        <textarea 
+                            id="message" 
+                            class="form-textarea" 
+                            placeholder="Tell us how we can help you..."
+                            required
+                        ></textarea>
+                    </div>
+
+                    <button type="submit" class="submit-btn">Send Message</button>
+                </form>
+            </div>
+
+            <!-- Contact Info -->
+            <div class="contact-info">
+                <div class="info-card">
+                    <div class="info-icon">📧</div>
+                    <h3 class="info-title">Email Us</h3>
+                    <p class="info-text">
+                        <a href="mailto:siddivenkatesh111@gmail.com" class="info-link">siddivenkatesh111@gmail.com</a><br>
+                        <a href="mailto:pokalaappaiahnaidu634@gmail.com" class="info-link">pokalaappaiahnaidu634@gmail.com</a><br>
+                        <a href="mailto:saikrishnapallothu@gmail.com" class="info-link">saikrishnapallothu@gmail.com</a>
+                    </p>
+                    <p class="info-text" style="margin-top: 1rem;">
+                        We typically respond within 24-48 hours.
+                    </p>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-icon">📍</div>
+                    <h3 class="info-title">Our Location</h3>
+                    <p class="info-text">
+                        Narasaraopeta Engineering College<br>
+                        Narasaraopeta<br>
+                        Palnadu District, Andhra Pradesh<br>
+                        India
+                    </p>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-icon">🌐</div>
+                    <h3 class="info-title">Follow Us</h3>
+                    <p class="info-text">
+                        Stay updated with our latest research and datasets.
+                    </p>
+                    <div class="social-links">
+                        <a href="#" class="social-btn" title="Twitter">𝕏</a>
+                        <a href="#" class="social-btn" title="LinkedIn">in</a>
+                        <a href="#" class="social-btn" title="GitHub">⌘</a>
+                        <a href="#" class="social-btn" title="Discord">⚡</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- FAQ Section -->
+        <div class="faq-section">
+            <h2 class="section-title">Frequently Asked Questions</h2>
+            <div class="faq-grid">
+                <div class="faq-item">
+                    <h3 class="faq-question">How can I access your datasets?</h3>
+                    <p class="faq-answer">
+                        All our datasets are freely available for download from our website. Simply navigate to the Datasets section and choose your preferred format (CSV, JSON, or Excel).
+                    </p>
+                </div>
+
+                <div class="faq-item">
+                    <h3 class="faq-question">Can I use your data for commercial projects?</h3>
+                    <p class="faq-answer">
+                        Yes, our datasets are released under open licenses that allow both academic and commercial use. Please review the specific license for each dataset.
+                    </p>
+                </div>
+
+                <div class="faq-item">
+                    <h3 class="faq-question">Do you offer research collaborations?</h3>
+                    <p class="faq-answer">
+                        Absolutely! We're always interested in collaborating with researchers and institutions. Contact us with your proposal and we'll be in touch.
+                    </p>
+                </div>
+
+                <div class="faq-item">
+                    <h3 class="faq-question">How often are datasets updated?</h3>
+                    <p class="faq-answer">
+                        We regularly update our datasets to ensure accuracy and relevance. Major updates are typically released quarterly, with minor updates as needed.
+                    </p>
+                </div>
+
+                <div class="faq-item">
+                    <h3 class="faq-question">Can I contribute data or research?</h3>
+                    <p class="faq-answer">
+                        Yes! We welcome contributions from the community. Please reach out through our contact form to discuss how you can contribute.
+                    </p>
+                </div>
+
+                <div class="faq-item">
+                    <h3 class="faq-question">Do you provide technical support?</h3>
+                    <p class="faq-answer">
+                        We offer community support through our documentation and forums. For specific technical issues, please email our support team.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Form submission handling
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Get form values
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const subject = document.getElementById('subject').value;
+            const message = document.getElementById('message').value;
+            
+            // In a real implementation, you would send this data to a server
+            console.log('Form submitted:', { name, email, subject, message });
+            
+            // Show success message
+            const successMessage = document.getElementById('successMessage');
+            successMessage.classList.add('show');
+            
+            // Reset form
+            this.reset();
+            
+            // Hide success message after 5 seconds
+            setTimeout(() => {
+                successMessage.classList.remove('show');
+            }, 5000);
+        });
+
+        // Add scroll reveal animation
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.contact-layout, .faq-section').forEach(element => {
+                observer.observe(element);
+            });
+        });
+    </script>
+</body>
+</html>

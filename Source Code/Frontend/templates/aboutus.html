@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - Machine Learning Research</title>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-teal: #0d4f54;
+            --accent-cyan: #5dd9d0;
+            --bright-cyan: #7ffff8;
+            --dark-bg: #0a3438;
+            --text-light: #ffffff;
+            --text-muted: #c0e8e6;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: linear-gradient(135deg, var(--dark-bg) 0%, var(--primary-teal) 100%);
+            color: var(--text-light);
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* Background */
+        .background-decoration {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .floating-orb {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, rgba(93, 217, 208, 0.2), transparent);
+            filter: blur(60px);
+            animation: float 25s infinite ease-in-out;
+        }
+
+        .orb-1 {
+            width: 500px;
+            height: 500px;
+            top: -150px;
+            right: -150px;
+        }
+
+        .orb-2 {
+            width: 400px;
+            height: 400px;
+            bottom: -100px;
+            left: -100px;
+            animation-delay: 8s;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translate(0, 0) scale(1);
+                opacity: 0.4;
+            }
+            50% {
+                transform: translate(50px, -50px) scale(1.1);
+                opacity: 0.6;
+            }
+        }
+
+        /* Header */
+        header {
+            position: relative;
+            z-index: 100;
+            padding: 2rem 4rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            animation: slideDown 0.8s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .logo {
+            font-family: 'Syne', sans-serif;
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--bright-cyan);
+            text-shadow: 0 0 30px rgba(127, 255, 248, 0.3);
+            text-decoration: none;
+        }
+
+        nav {
+            display: flex;
+            align-items: center;
+            gap: 3rem;
+        }
+
+        .nav-link {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent-cyan);
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: var(--bright-cyan);
+        }
+
+        .nav-link:hover::after,
+        .nav-link.active::after {
+            width: 100%;
+        }
+
+        /* Container */
+        .container {
+            position: relative;
+            z-index: 10;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 3rem 4rem 6rem;
+        }
+
+        /* Page Header */
+        .page-header {
+            text-align: center;
+            margin-bottom: 5rem;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .page-badge {
+            display: inline-block;
+            padding: 0.5rem 1.5rem;
+            background: rgba(93, 217, 208, 0.2);
+            border: 1px solid var(--accent-cyan);
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--bright-cyan);
+            margin-bottom: 2rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                box-shadow: 0 0 0 0 rgba(93, 217, 208, 0.4);
+            }
+            50% {
+                box-shadow: 0 0 0 10px rgba(93, 217, 208, 0);
+            }
+        }
+
+        .page-title {
+            font-family: 'Syne', sans-serif;
+            font-size: 4rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            color: var(--bright-cyan);
+            text-shadow: 0 0 30px rgba(127, 255, 248, 0.3);
+            animation: glow 3s ease-in-out infinite;
+        }
+
+        @keyframes glow {
+            0%, 100% {
+                text-shadow: 0 0 20px rgba(127, 255, 248, 0.3);
+            }
+            50% {
+                text-shadow: 0 0 40px rgba(127, 255, 248, 0.6);
+            }
+        }
+
+        .page-subtitle {
+            font-size: 1.4rem;
+            color: var(--text-muted);
+            max-width: 900px;
+            margin: 0 auto;
+            line-height: 1.7;
+        }
+
+        /* Sections */
+        section {
+            margin-bottom: 4rem;
+            animation: fadeIn 0.8s ease-out both;
+        }
+
+        section:nth-child(2) { animation-delay: 0.2s; }
+        section:nth-child(3) { animation-delay: 0.4s; }
+        section:nth-child(4) { animation-delay: 0.6s; }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .section-title {
+            font-family: 'Syne', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            color: var(--bright-cyan);
+            text-align: center;
+        }
+
+        .content-card {
+            background: rgba(13, 79, 84, 0.3);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(93, 217, 208, 0.2);
+            border-radius: 20px;
+            padding: 3rem;
+            margin-bottom: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .content-card:hover {
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 30px rgba(93, 217, 208, 0.2);
+            transform: translateY(-5px);
+        }
+
+        .content-card h3 {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.8rem;
+            color: var(--accent-cyan);
+            margin-bottom: 1.5rem;
+        }
+
+        .content-card p {
+            color: var(--text-muted);
+            line-height: 1.8;
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Team Grid */
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .team-member {
+            background: rgba(13, 79, 84, 0.3);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(93, 217, 208, 0.2);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .team-member:hover {
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 30px rgba(93, 217, 208, 0.2);
+            transform: translateY(-10px);
+        }
+
+        .member-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent-cyan), var(--bright-cyan));
+            margin: 0 auto 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--dark-bg);
+            border: 3px solid var(--accent-cyan);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .member-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .member-avatar-text {
+            position: relative;
+            z-index: 1;
+        }
+
+        .member-name {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.5rem;
+            color: var(--bright-cyan);
+            margin-bottom: 0.5rem;
+        }
+
+        .member-role {
+            color: var(--accent-cyan);
+            font-size: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .member-bio {
+            color: var(--text-muted);
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        /* Values Grid */
+        .values-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .value-card {
+            background: rgba(13, 79, 84, 0.3);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(93, 217, 208, 0.2);
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .value-card:hover {
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 30px rgba(93, 217, 208, 0.2);
+            transform: translateY(-5px);
+        }
+
+        .value-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .value-title {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.3rem;
+            color: var(--bright-cyan);
+            margin-bottom: 1rem;
+        }
+
+        .value-description {
+            color: var(--text-muted);
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        /* Stats Section */
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .stat-card {
+            background: rgba(13, 79, 84, 0.3);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(93, 217, 208, 0.2);
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 30px rgba(93, 217, 208, 0.2);
+        }
+
+        .stat-number {
+            font-family: 'Syne', sans-serif;
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--bright-cyan);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: var(--text-muted);
+            font-size: 1rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            header {
+                padding: 1.5rem 2rem;
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+
+            nav {
+                gap: 1.5rem;
+            }
+
+            .container {
+                padding: 2rem 1.5rem 4rem;
+            }
+
+            .page-title {
+                font-size: 2.5rem;
+            }
+
+            .page-subtitle {
+                font-size: 1.1rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .team-grid,
+            .values-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background Decoration -->
+    <div class="background-decoration">
+        <div class="floating-orb orb-1"></div>
+        <div class="floating-orb orb-2"></div>
+    </div>
+
+    <!-- Header -->
+    <header>
+        <a href="/home" class="logo">ML Research</a>
+        <nav>
+            <a href="/home" class="nav-link">Home</a>
+            <a href="/dataset" class="nav-link">Dataset</a>
+            <a href="/aboutus" class="nav-link active">About Us</a>
+            <a href="/predictloan" class="nav-link">Predict Loan</a>
+            <a href="/dashboard" class="nav-link active">Dashboard</a>
+            <a href="/predictresult" class="nav-link">Prediction Results</a>
+            <a href="/contactus" class="nav-link">Contact Us</a>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Page Header -->
+        <div class="page-header">
+            <span class="page-badge">Who We Are</span>
+            <h1 class="page-title">About Us</h1>
+            <p class="page-subtitle">
+                Pioneering the future of machine learning through innovative research, comprehensive datasets, and collaborative exploration of artificial intelligence.
+            </p>
+        </div>
+
+        <!-- Mission Section -->
+        <section>
+            <h2 class="section-title">Our Mission</h2>
+            <div class="content-card">
+                <h3>Advancing Machine Learning Research</h3>
+                <p>
+                    We are dedicated to democratizing access to high-quality datasets and research tools that empower the global machine learning community. Our mission is to accelerate innovation by providing researchers, students, and professionals with the resources they need to push the boundaries of artificial intelligence.
+                </p>
+                <p>
+                    Through rigorous data collection, comprehensive documentation, and open collaboration, we aim to bridge the gap between theoretical research and practical applications, fostering a new generation of AI-driven solutions that address real-world challenges.
+                </p>
+            </div>
+        </section>
+
+        <!-- Stats Section -->
+        <section>
+            <div class="stats-container">
+                <div class="stat-card">
+                    <div class="stat-number">250K+</div>
+                    <div class="stat-label">Data Records</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">50+</div>
+                    <div class="stat-label">Research Projects</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">15K+</div>
+                    <div class="stat-label">Active Researchers</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">100+</div>
+                    <div class="stat-label">Publications</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Values Section -->
+        <section>
+            <h2 class="section-title">Our Core Values</h2>
+            <div class="values-grid">
+                <div class="value-card">
+                    <div class="value-icon">🎯</div>
+                    <h3 class="value-title">Excellence</h3>
+                    <p class="value-description">
+                        We strive for the highest standards in data quality, research methodology, and scientific rigor in everything we do.
+                    </p>
+                </div>
+                <div class="value-card">
+                    <div class="value-icon">🤝</div>
+                    <h3 class="value-title">Collaboration</h3>
+                    <p class="value-description">
+                        We believe in the power of open collaboration and knowledge sharing to drive innovation forward.
+                    </p>
+                </div>
+                <div class="value-card">
+                    <div class="value-icon">🌍</div>
+                    <h3 class="value-title">Accessibility</h3>
+                    <p class="value-description">
+                        Making cutting-edge research tools and datasets accessible to everyone, regardless of background.
+                    </p>
+                </div>
+                <div class="value-card">
+                    <div class="value-icon">⚡</div>
+                    <h3 class="value-title">Innovation</h3>
+                    <p class="value-description">
+                        Continuously pushing boundaries and exploring new frontiers in machine learning and AI research.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Team Section (Now with 3 members) -->
+        <section>
+            <h2 class="section-title">Meet Our Team</h2>
+            <div class="team-grid">
+                <div class="team-member">
+                    <div class="member-avatar">
+                        <img src="/static/images/mypic.jpeg" alt="SVS">
+                    </div>
+                    <h3 class="member-name">Siddi Venkatesh</h3>
+                    <p class="member-role">Machine Learning & Modeling Lead</p>
+                    <p class="member-bio">
+                        Responsible for designing, training, and evaluating the loan prediction model. Worked on feature selection, algorithm choice (e.g., Logistic Regression, Random Forest), model tuning, and performance evaluation to ensure accurate risk classification.
+                    </p>
+                </div>
+                <div class="team-member">
+                    <div class="member-avatar">
+                        <img src="/static/images/appaiah.jpg" alt="PAH">
+                    </div>
+                    <h3 class="member-name">Pokala Appaiah</h3>
+                    <p class="member-role">Data Processing & Backend Lead</p>
+                    <p class="member-bio">
+                        Handled data cleaning, preprocessing, and dataset preparation for the loan prediction system. Implemented backend logic for model integration, data flow, and prediction handling using Python-based tools and frameworks.
+                    </p>
+                </div>
+                <div class="team-member">
+                    <div class="member-avatar">
+                        <img src="/static/images/mastan.jpg" alt="PVSK">
+                    </div>
+                    <h3 class="member-name">Pallothu Venkata Sai Krishna</h3>
+                    <p class="member-role">Frontend & System Integration Lead</p>
+                    <p class="member-bio">
+                        Developed the user interface and integrated the trained model into the application. Focused on form inputs, result visualization, and clear risk-status output to make the loan prediction system usable and understandable.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Vision Section -->
+        <section>
+            <h2 class="section-title">Our Vision</h2>
+            <div class="content-card">
+                <h3>Shaping the Future of AI</h3>
+                <p>
+                    We envision a future where machine learning is not just a specialized field but an integral part of solving humanity's greatest challenges. From healthcare to climate science, from education to sustainable development, AI has the potential to transform every aspect of our lives.
+                </p>
+                <p>
+                    Our long-term vision is to create an ecosystem where researchers worldwide can collaborate seamlessly, share insights freely, and build upon each other's work to accelerate the pace of discovery. We're committed to fostering a community that values transparency, reproducibility, and ethical considerations in AI development.
+                </p>
+                <p>
+                    By maintaining the highest standards of data quality and research integrity, we aim to be the trusted foundation upon which the next generation of AI breakthroughs are built.
+                </p>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // Add scroll reveal animation
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('section').forEach(section => {
+                observer.observe(section);
+            });
+        });
+    </script>
+</body>
+</html>

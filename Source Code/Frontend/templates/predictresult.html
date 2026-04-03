@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prediction Results - Loan Risk Prediction</title>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-teal: #0d4f54;
+            --accent-cyan: #5dd9d0;
+            --bright-cyan: #7ffff8;
+            --dark-bg: #0a3438;
+            --text-light: #ffffff;
+            --text-muted: #c0e8e6;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: linear-gradient(135deg, var(--dark-bg) 0%, var(--primary-teal) 100%);
+            color: var(--text-light);
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* Background */
+        .background-decoration {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .floating-orb {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, rgba(93, 217, 208, 0.2), transparent);
+            filter: blur(60px);
+            animation: float 25s infinite ease-in-out;
+        }
+
+        .orb-1 {
+            width: 500px;
+            height: 500px;
+            top: -150px;
+            right: -150px;
+        }
+
+        .orb-2 {
+            width: 400px;
+            height: 400px;
+            bottom: -100px;
+            left: -100px;
+            animation-delay: 8s;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translate(0, 0) scale(1);
+                opacity: 0.4;
+            }
+            50% {
+                transform: translate(50px, -50px) scale(1.1);
+                opacity: 0.6;
+            }
+        }
+
+        /* Header */
+        header {
+            position: relative;
+            z-index: 100;
+            padding: 2rem 4rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            animation: slideDown 0.8s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .logo {
+            font-family: 'Syne', sans-serif;
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--bright-cyan);
+            text-shadow: 0 0 30px rgba(127, 255, 248, 0.3);
+            text-decoration: none;
+        }
+
+        nav {
+            display: flex;
+            align-items: center;
+            gap: 3rem;
+        }
+
+        .nav-link {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent-cyan);
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: var(--bright-cyan);
+        }
+
+        .nav-link:hover::after,
+        .nav-link.active::after {
+            width: 100%;
+        }
+
+        /* Container */
+        .container {
+            position: relative;
+            z-index: 10;
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 3rem 2rem 6rem;
+        }
+
+        /* Page Header */
+        .page-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .page-title {
+            font-family: 'Syne', sans-serif;
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            color: var(--bright-cyan);
+            text-shadow: 0 0 30px rgba(127, 255, 248, 0.3);
+        }
+
+        .page-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+        }
+
+        /* Controls */
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .search-box {
+            padding: 0.8rem 1.5rem;
+            background: rgba(93, 217, 208, 0.1);
+            border: 1px solid rgba(93, 217, 208, 0.3);
+            border-radius: 50px;
+            color: var(--text-light);
+            font-size: 1rem;
+            width: 300px;
+            transition: all 0.3s ease;
+        }
+
+        .search-box:focus {
+            outline: none;
+            border-color: var(--bright-cyan);
+            box-shadow: 0 0 20px rgba(93, 217, 208, 0.3);
+        }
+
+        .btn-clear {
+            padding: 0.8rem 2rem;
+            background: rgba(239, 68, 68, 0.2);
+            border: 1px solid #ef4444;
+            border-radius: 50px;
+            color: #ef4444;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-clear:hover {
+            background: rgba(239, 68, 68, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .table-info {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* Table Container */
+        .table-container {
+            overflow-x: auto;
+            border-radius: 20px;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(93, 217, 208, 0.2);
+            animation: slideUp 0.8s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+
+        thead {
+            background: rgba(93, 217, 208, 0.2);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        th {
+            padding: 1.2rem 1rem;
+            text-align: left;
+            font-weight: 700;
+            color: var(--bright-cyan);
+            border-bottom: 2px solid var(--accent-cyan);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-size: 0.75rem;
+            white-space: nowrap;
+        }
+
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid rgba(93, 217, 208, 0.1);
+            color: var(--text-muted);
+        }
+
+        tbody tr {
+            transition: all 0.3s ease;
+            animation: fadeInRow 0.5s ease-out both;
+        }
+
+        @keyframes fadeInRow {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        tbody tr:hover {
+            background: rgba(93, 217, 208, 0.15);
+            transform: scale(1.01);
+        }
+
+        /* Status Badge */
+        .status-badge {
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            display: inline-block;
+        }
+
+        .status-low-risk {
+            background: rgba(34, 197, 94, 0.2);
+            color: #22c55e;
+            border: 1px solid #22c55e;
+        }
+
+        .status-high-risk {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+            border: 1px solid #ef4444;
+        }
+
+        /* Risk Percentage Bar */
+        .risk-bar-container {
+            width: 100%;
+            max-width: 150px;
+            height: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .risk-bar {
+            height: 100%;
+            border-radius: 15px;
+            transition: width 1s ease-out;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.75rem;
+            color: white;
+        }
+
+        .risk-bar.low {
+            background: linear-gradient(90deg, #22c55e 0%, #86efac 100%);
+        }
+
+        .risk-bar.high {
+            background: linear-gradient(90deg, #ef4444 0%, #fca5a5 100%);
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: var(--text-muted);
+        }
+
+        .empty-state-icon {
+            font-size: 5rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        .empty-state-title {
+            font-family: 'Syne', sans-serif;
+            font-size: 2rem;
+            color: var(--bright-cyan);
+            margin-bottom: 1rem;
+        }
+
+        .empty-state-text {
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+        }
+
+        .btn-predict {
+            padding: 1rem 2.5rem;
+            background: var(--accent-cyan);
+            color: var(--dark-bg);
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-predict:hover {
+            background: var(--bright-cyan);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(93, 217, 208, 0.4);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            header {
+                padding: 1.5rem;
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            nav {
+                gap: 1rem;
+            }
+
+            .container {
+                padding: 2rem 1rem 4rem;
+            }
+
+            .page-title {
+                font-size: 2rem;
+            }
+
+            .controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .search-box {
+                width: 100%;
+            }
+
+            table {
+                font-size: 0.75rem;
+            }
+
+            th, td {
+                padding: 0.7rem 0.5rem;
+            }
+
+            .risk-bar-container {
+                max-width: 100px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="background-decoration">
+        <div class="floating-orb orb-1"></div>
+        <div class="floating-orb orb-2"></div>
+    </div>
+
+    <!-- Header -->
+    <header>
+        <a href="/home" class="logo">ML Research</a>
+        <nav>
+            <a href="/home" class="nav-link">Home</a>
+            <a href="/dataset" class="nav-link">Dataset</a>
+            <a href="/aboutus" class="nav-link">About Us</a>
+            <a href="/predictloan" class="nav-link">Predict Loan</a>
+            <a href="/dashboard" class="nav-link active">Dashboard</a>
+            <a href="/predictresult" class="nav-link active">Prediction Results</a>
+            <a href="/contactus" class="nav-link">Contact Us</a>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1 class="page-title">Prediction History</h1>
+            <p class="page-subtitle">View all your loan risk predictions and their results</p>
+        </div>
+
+        <!-- Controls -->
+        <div class="controls">
+            <input type="text" id="searchBox" class="search-box" placeholder="🔍 Search predictions..." onkeyup="filterTable()">
+            <span class="table-info">Total Predictions: <span id="recordCount">0</span></span>
+            <button class="btn-clear" onclick="clearHistory()">🗑️ Clear History</button>
+        </div>
+
+        <!-- Table Container -->
+        <div class="table-container" id="tableContainer">
+            <table id="historyTable">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Date & Time</th>
+                        <th>Age</th>
+                        <th>Income</th>
+                        <th>Loan Amount</th>
+                        <th>Credit Score</th>
+                        <th>Employment</th>
+                        <th>DTI Ratio</th>
+                        <th>Status</th>
+                        <th>Risk Level</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                    <!-- Data will be loaded here -->
+                </tbody>
+            </table>
+
+            <!-- Empty State -->
+            <div class="empty-state" id="emptyState" style="display: none;">
+                <div class="empty-state-icon">📊</div>
+                <h2 class="empty-state-title">No Predictions Yet</h2>
+                <p class="empty-state-text">You haven't made any loan predictions yet. Start by predicting a loan to see your history here.</p>
+                <a href="/predictloan" class="btn-predict">Make Your First Prediction</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let predictions = [];
+        let filteredPredictions = [];
+
+        // Load predictions from localStorage
+        function loadPredictions() {
+            const stored = localStorage.getItem('loanPredictions');
+            if (stored) {
+                predictions = JSON.parse(stored);
+                filteredPredictions = [...predictions];
+            } else {
+                predictions = [];
+                filteredPredictions = [];
+            }
+            renderTable();
+        }
+
+        // Render table
+        function renderTable() {
+            const tbody = document.getElementById('tableBody');
+            const emptyState = document.getElementById('emptyState');
+            const table = document.getElementById('historyTable');
+
+            document.getElementById('recordCount').textContent = filteredPredictions.length;
+
+            if (filteredPredictions.length === 0) {
+                table.style.display = 'none';
+                emptyState.style.display = 'block';
+                return;
+            }
+
+            table.style.display = 'table';
+            emptyState.style.display = 'none';
+
+            tbody.innerHTML = filteredPredictions.map((pred, index) => {
+                const riskPercent = (pred.probability * 100).toFixed(1);
+                const isHighRisk = pred.prediction === 1;
+                
+                return `
+                    <tr style="animation-delay: ${index * 0.05}s">
+                        <td>${filteredPredictions.length - index}</td>
+                        <td>${pred.timestamp}</td>
+                        <td>${pred.age}</td>
+                        <td>₹${parseInt(pred.income).toLocaleString()}</td>
+                        <td>₹${parseInt(pred.loan_amount).toLocaleString()}</td>
+                        <td>${pred.credit_score}</td>
+                        <td>${pred.employment_type}</td>
+                        <td>${pred.dti_ratio}%</td>
+                        <td>
+                            <span class="status-badge ${isHighRisk ? 'status-high-risk' : 'status-low-risk'}">
+                                ${pred.result}
+                            </span>
+                        </td>
+                        <td>
+                            <div class="risk-bar-container">
+                                <div class="risk-bar ${isHighRisk ? 'high' : 'low'}" style="width: ${riskPercent}%">
+                                    ${riskPercent}%
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        // Filter table
+        function filterTable() {
+            const searchTerm = document.getElementById('searchBox').value.toLowerCase();
+            filteredPredictions = predictions.filter(pred => 
+                Object.values(pred).some(val => 
+                    val.toString().toLowerCase().includes(searchTerm)
+                )
+            );
+            renderTable();
+        }
+
+        // Clear history
+        function clearHistory() {
+            if (confirm('Are you sure you want to clear all prediction history? This action cannot be undone.')) {
+                localStorage.removeItem('loanPredictions');
+                predictions = [];
+                filteredPredictions = [];
+                renderTable();
+            }
+        }
+
+        // Listen for new predictions from predictloan page
+        window.addEventListener('storage', function(e) {
+            if (e.key === 'loanPredictions') {
+                loadPredictions();
+            }
+        });
+
+        // Load on page load
+        loadPredictions();
+    </script>
+</body>
+</html>

@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loan Risk Prediction System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-teal: #0d4f54;
+            --accent-cyan: #5dd9d0;
+            --bright-cyan: #7ffff8;
+            --dark-bg: #0a3438;
+            --text-light: #ffffff;
+            --text-muted: #c0e8e6;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: linear-gradient(135deg, var(--dark-bg) 0%, var(--primary-teal) 100%);
+            color: var(--text-light);
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* Animated Background Elements */
+        .background-decoration {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .floating-orb {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, rgba(93, 217, 208, 0.15), transparent);
+            filter: blur(40px);
+            animation: float 20s infinite ease-in-out;
+        }
+
+        .orb-1 {
+            width: 400px;
+            height: 400px;
+            top: -100px;
+            right: -100px;
+            animation-delay: 0s;
+        }
+
+        .orb-2 {
+            width: 300px;
+            height: 300px;
+            bottom: 10%;
+            left: -50px;
+            animation-delay: 7s;
+        }
+
+        .orb-3 {
+            width: 250px;
+            height: 250px;
+            top: 50%;
+            left: 30%;
+            animation-delay: 14s;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translate(0, 0) scale(1);
+                opacity: 0.3;
+            }
+            33% {
+                transform: translate(30px, -30px) scale(1.1);
+                opacity: 0.5;
+            }
+            66% {
+                transform: translate(-20px, 20px) scale(0.9);
+                opacity: 0.4;
+            }
+        }
+
+        /* Header */
+        header {
+            position: relative;
+            z-index: 100;
+            padding: 2rem 4rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            animation: slideDown 0.8s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .logo {
+            font-family: 'Syne', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 800;
+            letter-spacing: 0.3em;
+            color: var(--bright-cyan);
+            text-shadow: 0 0 30px rgba(127, 255, 248, 0.3);
+        }
+
+        nav {
+            display: flex;
+            align-items: center;
+            gap: 3rem;
+        }
+
+        .nav-link {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent-cyan);
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--bright-cyan);
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .globe-icon {
+            width: 24px;
+            height: 24px;
+            stroke: var(--text-muted);
+            transition: stroke 0.3s ease;
+        }
+
+        .globe-icon:hover {
+            stroke: var(--bright-cyan);
+        }
+
+        .get-app-btn {
+            padding: 0.9rem 2rem;
+            background: var(--accent-cyan);
+            color: var(--dark-bg);
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 20px rgba(93, 217, 208, 0.3);
+        }
+
+        .get-app-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(93, 217, 208, 0.5);
+            background: var(--bright-cyan);
+        }
+
+        /* Main Content */
+        .hero {
+            position: relative;
+            z-index: 10;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            padding: 4rem 4rem 6rem;
+            max-width: 1600px;
+            margin: 0 auto;
+            align-items: center;
+        }
+
+        .hero-content {
+            animation: fadeInLeft 1s ease-out 0.3s both;
+        }
+
+        @keyframes fadeInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .hero-title {
+            font-family: 'Syne', sans-serif;
+            font-size: 4rem;
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 2rem;
+            color: var(--text-light);
+        }
+
+        .hero-title .highlight {
+            color: var(--accent-cyan);
+            position: relative;
+            display: inline-block;
+        }
+
+        .hero-subtitle {
+            font-size: 1.25rem;
+            line-height: 1.6;
+            color: var(--text-muted);
+            margin-bottom: 3rem;
+            max-width: 600px;
+        }
+
+        .download-btn {
+            padding: 1.2rem 3rem;
+            background: transparent;
+            color: var(--bright-cyan);
+            border: 2px solid var(--accent-cyan);
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .download-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: var(--accent-cyan);
+            transition: width 0.6s, height 0.6s, top 0.6s, left 0.6s;
+            transform: translate(-50%, -50%);
+            z-index: -1;
+        }
+
+        .download-btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .download-btn:hover {
+            color: var(--dark-bg);
+            border-color: var(--bright-cyan);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 40px rgba(93, 217, 208, 0.4);
+        }
+
+        /* Hero Visual */
+        .hero-visual {
+            position: relative;
+            height: 700px;
+            animation: fadeInRight 1s ease-out 0.5s both;
+        }
+
+        @keyframes fadeInRight {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Sunburst Effect */
+        .sunburst {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 600px;
+            height: 600px;
+            animation: rotate 40s linear infinite;
+        }
+
+        @keyframes rotate {
+            from {
+                transform: translate(-50%, -50%) rotate(0deg);
+            }
+            to {
+                transform: translate(-50%, -50%) rotate(360deg);
+            }
+        }
+
+        .ray {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 120px;
+            height: 300px;
+            background: linear-gradient(to top, 
+                transparent, 
+                var(--accent-cyan) 50%, 
+                transparent
+            );
+            opacity: 0.2;
+            transform-origin: 50% 0%;
+            border-radius: 50% 50% 0 0;
+        }
+
+        .ray:nth-child(1) { transform: translate(-50%, -100%) rotate(0deg); }
+        .ray:nth-child(2) { transform: translate(-50%, -100%) rotate(30deg); }
+        .ray:nth-child(3) { transform: translate(-50%, -100%) rotate(60deg); }
+        .ray:nth-child(4) { transform: translate(-50%, -100%) rotate(90deg); }
+        .ray:nth-child(5) { transform: translate(-50%, -100%) rotate(120deg); }
+        .ray:nth-child(6) { transform: translate(-50%, -100%) rotate(150deg); }
+        .ray:nth-child(7) { transform: translate(-50%, -100%) rotate(180deg); }
+        .ray:nth-child(8) { transform: translate(-50%, -100%) rotate(210deg); }
+        .ray:nth-child(9) { transform: translate(-50%, -100%) rotate(240deg); }
+        .ray:nth-child(10) { transform: translate(-50%, -100%) rotate(270deg); }
+        .ray:nth-child(11) { transform: translate(-50%, -100%) rotate(300deg); }
+        .ray:nth-child(12) { transform: translate(-50%, -100%) rotate(330deg); }
+
+        /* Phone Mockup */
+        .phone-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 20;
+            animation: float-phone 6s ease-in-out infinite;
+        }
+
+        @keyframes float-phone {
+            0%, 100% {
+                transform: translate(-50%, -50%) translateY(0px) rotate(-3deg);
+            }
+            50% {
+                transform: translate(-50%, -50%) translateY(-20px) rotate(-3deg);
+            }
+        }
+
+        .phone {
+            width: 280px;
+            height: 580px;
+            background: linear-gradient(135deg, #0f2d30 0%, #1a4449 100%);
+            border-radius: 40px;
+            padding: 15px;
+            box-shadow: 
+                0 30px 80px rgba(0, 0, 0, 0.5),
+                0 0 0 2px rgba(93, 217, 208, 0.2),
+                inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+            position: relative;
+        }
+
+        .phone-notch {
+            position: absolute;
+            top: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 120px;
+            height: 25px;
+            background: #000;
+            border-radius: 0 0 15px 15px;
+            z-index: 10;
+        }
+
+        .phone-screen {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(180deg, #0a2427 0%, #0f3034 100%);
+            border-radius: 30px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .screen-content {
+            padding: 50px 20px 20px;
+        }
+
+        .balance-card {
+            background: linear-gradient(135deg, rgba(93, 217, 208, 0.15) 0%, rgba(127, 255, 248, 0.05) 100%);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(93, 217, 208, 0.2);
+        }
+
+        .balance-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-bottom: 5px;
+        }
+
+        .balance-amount {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--bright-cyan);
+        }
+
+        .widgets-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .widget {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .widget-title {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+
+        .widget-value {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text-light);
+        }
+
+        /* Floating Cards */
+        .card-element {
+            position: absolute;
+            width: 280px;
+            height: 180px;
+            background: linear-gradient(135deg, #1a4449 0%, #0d3337 100%);
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(93, 217, 208, 0.2);
+            animation: float-card 8s ease-in-out infinite;
+        }
+
+        .card-element.card-1 {
+            top: 10%;
+            right: -50px;
+            animation-delay: 0s;
+            transform: rotate(15deg);
+        }
+
+        .card-element.card-2 {
+            bottom: 15%;
+            right: -80px;
+            animation-delay: 2s;
+            transform: rotate(-10deg);
+        }
+
+        .card-element.card-3 {
+            bottom: 5%;
+            left: -100px;
+            animation-delay: 4s;
+            transform: rotate(8deg);
+        }
+
+        @keyframes float-card {
+            0%, 100% {
+                transform: translateY(0px) rotate(var(--rotation, 0deg));
+            }
+            50% {
+                transform: translateY(-30px) rotate(var(--rotation, 0deg));
+            }
+        }
+
+        .card-chip {
+            width: 50px;
+            height: 40px;
+            background: linear-gradient(135deg, #d4af37 0%, #f4d03f 100%);
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+
+        .card-number {
+            font-size: 1.2rem;
+            letter-spacing: 0.1em;
+            color: var(--text-light);
+            margin-bottom: 15px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .card-brand {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--accent-cyan);
+            font-family: 'Syne', sans-serif;
+        }
+
+        .contactless-icon {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 2rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            header {
+                padding: 1.5rem 2rem;
+            }
+
+            .hero {
+                grid-template-columns: 1fr;
+                padding: 2rem 2rem 4rem;
+                gap: 3rem;
+            }
+
+            .hero-visual {
+                height: 500px;
+            }
+
+            .sunburst {
+                width: 400px;
+                height: 400px;
+            }
+
+            .hero-title {
+                font-size: 3rem;
+            }
+
+            .card-element {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            header {
+                padding: 1rem;
+            }
+
+            .logo {
+                font-size: 2rem;
+            }
+
+            nav {
+                gap: 1.5rem;
+            }
+
+            .nav-link {
+                display: none;
+            }
+
+            .hero {
+                padding: 2rem 1.5rem;
+            }
+
+            .hero-title {
+                font-size: 2.5rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1.1rem;
+            }
+
+            .hero-visual {
+                height: 400px;
+            }
+
+            .phone {
+                width: 220px;
+                height: 460px;
+            }
+
+            .sunburst {
+                width: 300px;
+                height: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="background-decoration">
+        <div class="floating-orb orb-1"></div>
+        <div class="floating-orb orb-2"></div>
+        <div class="floating-orb orb-3"></div>
+    </div>
+
+    <!-- Header -->
+    <header>
+        <div class="logo">SLPS</div>
+        <nav>
+            </svg>
+            <a href="/home" class="nav-link">Home</a>
+            <a href="/dataset" class="nav-link">Dataset</a>
+            <a href="/aboutus" class="nav-link">About Us</a>
+            <a href="/predictloan" class="nav-link">Predict Loan</a>
+            <a href="/dashboard" class="nav-link active">Dashboard</a>
+            <a href="/predictresult" class="nav-link">Prediction Results</a>
+            <a href="/contactus" class="nav-link">Contact Us</a>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <main class="hero">
+        <div class="hero-content">
+            <h1 class="hero-title">
+                <span class="highlight">SLP System:</span> The Smart lending powered by predictive intelligence
+            </h1>
+            <p class="hero-subtitle">
+                Empower your financial decisions with the SLP System, utilizing advanced deep learning architectures to provide real-time, accurate loan default risk assessments and predictive insights.
+            </p>
+            <button class="download-btn">Download LPS</button>
+        </div>
+
+        <div class="hero-visual">
+            <!-- Sunburst Effect -->
+            <div class="sunburst">
+                <div class="ray"></div>
+                <div class="ray"></div>
+                <div class="ray"></div>
+                <div class="ray"></div>
+                <div class="ray"></div>
+                <div class="ray"></div>
+                <div class="ray"></div>
+                <div class="ray"></div>
+                <div class="ray"></div>
+                <div class="ray"></div>
+                <div class="ray"></div>
+                <div class="ray"></div>
+            </div>
+
+            <!-- Phone Mockup -->
+            <div class="phone-container">
+                <div class="phone">
+                    <div class="phone-notch"></div>
+                    <div class="phone-screen">
+                        <div class="screen-content">
+                            <div class="balance-card">
+                                <div class="balance-label">Available Balance</div>
+                                <div class="balance-amount">₦ 2,300,800</div>
+                            </div>
+                            <div class="widgets-grid">
+                                <div class="widget">
+                                    <div class="widget-title">Pay Bills</div>
+                                    <div class="widget-value">Quick Pay</div>
+                                </div>
+                                <div class="widget">
+                                    <div class="widget-title">Currency</div>
+                                    <div class="widget-value">$ 200.00</div>
+                                </div>
+                                <div class="widget">
+                                    <div class="widget-title">My Bills</div>
+                                    <div class="widget-value">$ 500.00</div>
+                                </div>
+                                <div class="widget">
+                                    <div class="widget-title">Transfer</div>
+                                    <div class="widget-value">Send Now</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Floating Card Elements -->
+            <div class="card-element card-1" style="--rotation: 15deg;">
+                <div class="contactless-icon">📶</div>
+                <div class="card-chip"></div>
+                <div class="card-number">•••• •••• •••• 8392</div>
+                <div class="card-brand">VISA</div>
+            </div>
+
+            <div class="card-element card-2" style="--rotation: -10deg;">
+                <div class="contactless-icon">📶</div>
+                <div class="card-chip"></div>
+                <div class="card-number">•••• •••• •••• 5741</div>
+                <div class="card-brand">RUPAY</div>
+            </div>
+
+            <div class="card-element card-3" style="--rotation: 8deg;">
+                <div class="contactless-icon">📶</div>
+                <div class="card-chip"></div>
+                <div class="card-number">•••• •••• •••• 2163</div>
+                <div class="card-brand">MAESTRO</div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

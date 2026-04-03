@@ -1,0 +1,1174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loan Prediction Dataset - Machine Learning Research</title>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-teal: #0d4f54;
+            --accent-cyan: #5dd9d0;
+            --bright-cyan: #7ffff8;
+            --dark-bg: #0a3438;
+            --text-light: #ffffff;
+            --text-muted: #c0e8e6;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: linear-gradient(135deg, var(--dark-bg) 0%, var(--primary-teal) 100%);
+            color: var(--text-light);
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* Background */
+        .background-decoration {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .floating-orb {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, rgba(93, 217, 208, 0.2), transparent);
+            filter: blur(60px);
+            animation: float 25s infinite ease-in-out;
+        }
+
+        .orb-1 {
+            width: 500px;
+            height: 500px;
+            top: -150px;
+            right: -150px;
+        }
+
+        .orb-2 {
+            width: 400px;
+            height: 400px;
+            bottom: -100px;
+            left: -100px;
+            animation-delay: 8s;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translate(0, 0) scale(1);
+                opacity: 0.4;
+            }
+            50% {
+                transform: translate(50px, -50px) scale(1.1);
+                opacity: 0.6;
+            }
+        }
+
+        /* Header */
+        header {
+            position: relative;
+            z-index: 100;
+            padding: 2rem 4rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            animation: slideDown 0.8s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .logo {
+            font-family: 'Syne', sans-serif;
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--bright-cyan);
+            text-shadow: 0 0 30px rgba(127, 255, 248, 0.3);
+            text-decoration: none;
+        }
+
+        nav {
+            display: flex;
+            align-items: center;
+            gap: 3rem;
+        }
+
+        .nav-link {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent-cyan);
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: var(--bright-cyan);
+        }
+
+        .nav-link:hover::after,
+        .nav-link.active::after {
+            width: 100%;
+        }
+
+        /* Container */
+        .container {
+            position: relative;
+            z-index: 10;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 3rem 4rem 6rem;
+        }
+
+        /* Page Header */
+        .page-header {
+            text-align: center;
+            margin-bottom: 5rem;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .page-badge {
+            display: inline-block;
+            padding: 0.5rem 1.5rem;
+            background: rgba(93, 217, 208, 0.2);
+            border: 1px solid var(--accent-cyan);
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--bright-cyan);
+            margin-bottom: 2rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                box-shadow: 0 0 0 0 rgba(93, 217, 208, 0.4);
+            }
+            50% {
+                box-shadow: 0 0 0 10px rgba(93, 217, 208, 0);
+            }
+        }
+
+        .page-title {
+            font-family: 'Syne', sans-serif;
+            font-size: 4rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            color: var(--bright-cyan);
+            text-shadow: 0 0 30px rgba(127, 255, 248, 0.3);
+            animation: glow 3s ease-in-out infinite;
+        }
+
+        @keyframes glow {
+            0%, 100% {
+                text-shadow: 0 0 20px rgba(127, 255, 248, 0.3);
+            }
+            50% {
+                text-shadow: 0 0 40px rgba(127, 255, 248, 0.6);
+            }
+        }
+
+        .page-subtitle {
+            font-size: 1.4rem;
+            color: var(--text-muted);
+            max-width: 900px;
+            margin: 0 auto;
+            line-height: 1.7;
+        }
+
+        /* Sections */
+        section {
+            margin-bottom: 4rem;
+            animation: fadeIn 0.8s ease-out both;
+        }
+
+        section:nth-child(2) { animation-delay: 0.2s; }
+        section:nth-child(3) { animation-delay: 0.3s; }
+        section:nth-child(4) { animation-delay: 0.4s; }
+        section:nth-child(5) { animation-delay: 0.5s; }
+        section:nth-child(6) { animation-delay: 0.6s; }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .section-card {
+            background: rgba(13, 79, 84, 0.3);
+            border: 1px solid rgba(93, 217, 208, 0.3);
+            border-radius: 30px;
+            padding: 4rem;
+            backdrop-filter: blur(10px);
+            transition: all 0.4s ease;
+        }
+
+        .section-card:hover {
+            border-color: var(--bright-cyan);
+            box-shadow: 0 20px 60px rgba(93, 217, 208, 0.3);
+            transform: translateY(-5px);
+        }
+
+        .section-title {
+            font-family: 'Syne', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            color: var(--bright-cyan);
+        }
+
+        .section-description {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .stat-card {
+            text-align: center;
+            padding: 2.5rem;
+            background: rgba(93, 217, 208, 0.1);
+            border-radius: 20px;
+            border: 1px solid rgba(93, 217, 208, 0.3);
+            transition: all 0.3s ease;
+            animation: scaleIn 0.6s ease-out both;
+        }
+
+        .stat-card:nth-child(1) { animation-delay: 0.7s; }
+        .stat-card:nth-child(2) { animation-delay: 0.8s; }
+        .stat-card:nth-child(3) { animation-delay: 0.9s; }
+        .stat-card:nth-child(4) { animation-delay: 1s; }
+
+        @keyframes scaleIn {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .stat-card:hover {
+            transform: translateY(-10px) scale(1.05);
+            border-color: var(--bright-cyan);
+            box-shadow: 0 15px 40px rgba(93, 217, 208, 0.4);
+        }
+
+        .stat-value {
+            font-family: 'Syne', sans-serif;
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--bright-cyan);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 1rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            font-weight: 600;
+        }
+
+        /* Features Grid */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .feature-card {
+            background: rgba(13, 79, 84, 0.3);
+            border: 1px solid rgba(93, 217, 208, 0.3);
+            border-radius: 25px;
+            padding: 3rem;
+            backdrop-filter: blur(10px);
+            transition: all 0.4s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-15px) scale(1.02);
+            border-color: var(--bright-cyan);
+            box-shadow: 0 20px 50px rgba(93, 217, 208, 0.4);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            display: block;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .feature-card:hover .feature-icon {
+            animation: spin 0.6s ease-in-out;
+        }
+
+        @keyframes spin {
+            from {
+                transform: rotate(0deg) scale(1);
+            }
+            to {
+                transform: rotate(360deg) scale(1.2);
+            }
+        }
+
+        .feature-title {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--bright-cyan);
+        }
+
+        .feature-description {
+            font-size: 1rem;
+            line-height: 1.7;
+            color: var(--text-muted);
+        }
+
+        /* Live Data Table */
+        .table-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .search-box {
+            padding: 0.8rem 1.5rem;
+            background: rgba(93, 217, 208, 0.1);
+            border: 1px solid rgba(93, 217, 208, 0.3);
+            border-radius: 50px;
+            color: var(--text-light);
+            font-size: 1rem;
+            width: 300px;
+            transition: all 0.3s ease;
+        }
+
+        .search-box:focus {
+            outline: none;
+            border-color: var(--bright-cyan);
+            box-shadow: 0 0 20px rgba(93, 217, 208, 0.3);
+        }
+
+        .table-info {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            border-radius: 20px;
+            background: rgba(0, 0, 0, 0.3);
+            max-height: 600px;
+            overflow-y: auto;
+            animation: slideUp 0.8s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+
+        thead {
+            background: rgba(93, 217, 208, 0.2);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        th {
+            padding: 1.2rem 1rem;
+            text-align: left;
+            font-weight: 700;
+            color: var(--bright-cyan);
+            border-bottom: 2px solid var(--accent-cyan);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-size: 0.75rem;
+            white-space: nowrap;
+        }
+
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid rgba(93, 217, 208, 0.1);
+            color: var(--text-muted);
+        }
+
+        tbody tr {
+            transition: all 0.3s ease;
+            animation: fadeInRow 0.5s ease-out both;
+        }
+
+        @keyframes fadeInRow {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        tbody tr:hover {
+            background: rgba(93, 217, 208, 0.15);
+            transform: scale(1.01);
+        }
+
+        .default-badge {
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .default-0 {
+            background: rgba(93, 217, 208, 0.2);
+            color: var(--bright-cyan);
+        }
+
+        .default-1 {
+            background: rgba(255, 87, 87, 0.2);
+            color: #ff5757;
+        }
+
+        /* Download Section */
+        .download-section {
+            background: linear-gradient(135deg, rgba(93, 217, 208, 0.3), rgba(13, 79, 84, 0.4));
+            border: 2px solid var(--accent-cyan);
+            border-radius: 30px;
+            padding: 4rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        .download-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(93, 217, 208, 0.2) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .download-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .download-title {
+            font-family: 'Syne', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            color: var(--bright-cyan);
+        }
+
+        .download-description {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            margin-bottom: 3rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .download-options {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .download-btn {
+            padding: 1.5rem 3rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 1rem;
+            font-family: 'DM Sans', sans-serif;
+            animation: scaleIn 0.6s ease-out both;
+        }
+
+        .download-btn:nth-child(1) { animation-delay: 0.2s; }
+        .download-btn:nth-child(2) { animation-delay: 0.3s; }
+        .download-btn:nth-child(3) { animation-delay: 0.4s; }
+
+        .download-btn.primary {
+            background: var(--accent-cyan);
+            color: var(--dark-bg);
+            box-shadow: 0 8px 30px rgba(93, 217, 208, 0.4);
+        }
+
+        .download-btn.primary:hover {
+            transform: translateY(-8px) scale(1.05);
+            box-shadow: 0 15px 50px rgba(93, 217, 208, 0.6);
+            background: var(--bright-cyan);
+        }
+
+        .download-btn.secondary {
+            background: rgba(13, 79, 84, 0.6);
+            color: var(--text-light);
+            border: 2px solid var(--accent-cyan);
+            backdrop-filter: blur(10px);
+        }
+
+        .download-btn.secondary:hover {
+            background: rgba(13, 79, 84, 0.8);
+            border-color: var(--bright-cyan);
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 10px 40px rgba(93, 217, 208, 0.3);
+        }
+
+        .file-info {
+            display: block;
+            font-size: 0.9rem;
+            margin-top: 2rem;
+            color: var(--text-muted);
+        }
+
+        /* Pagination */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .page-btn {
+            padding: 0.7rem 1.2rem;
+            background: rgba(93, 217, 208, 0.1);
+            border: 1px solid rgba(93, 217, 208, 0.3);
+            border-radius: 10px;
+            color: var(--text-light);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .page-btn:hover,
+        .page-btn.active {
+            background: var(--accent-cyan);
+            color: var(--dark-bg);
+            transform: translateY(-3px);
+        }
+
+        /* Notification Animations */
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(100px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideOutRight {
+            from {
+                opacity: 1;
+                transform: translateX(0);
+            }
+            to {
+                opacity: 0;
+                transform: translateX(100px);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .container {
+                padding: 2rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            header {
+                padding: 1.5rem;
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            nav {
+                gap: 1rem;
+            }
+
+            .nav-link:not(.active) {
+                display: none;
+            }
+
+            .container {
+                padding: 1.5rem;
+            }
+
+            .page-title {
+                font-size: 2.5rem;
+            }
+
+            .section-card {
+                padding: 2rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .download-options {
+                flex-direction: column;
+            }
+
+            .download-btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .search-box {
+                width: 100%;
+            }
+
+            .table-container {
+                font-size: 0.75rem;
+            }
+
+            th, td {
+                padding: 0.7rem 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="background-decoration">
+        <div class="floating-orb orb-1"></div>
+        <div class="floating-orb orb-2"></div>
+    </div>
+
+    <!-- Header -->
+    <header>
+        <a href="/home" class="logo">LoanPredict</a>
+        <nav>
+            <a href="/home" class="nav-link">Home</a>
+            <a href="/dataset" class="nav-link active">Dataset</a>
+            <a href="/aboutus" class="nav-link">About Us</a>
+            <a href="/predictloan" class="nav-link">Predict Loan</a>
+            <a href="/dashboard" class="nav-link active">Dashboard</a>
+            <a href="/predictresult" class="nav-link">Prediction Results</a>
+            <a href="/contactus" class="nav-link">Contact Us</a>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Page Header -->
+        <div class="page-header">
+            <div class="page-badge">📊 Machine Learning Dataset</div>
+            <h1 class="page-title">Loan Prediction Dataset</h1>
+            <p class="page-subtitle">
+                A comprehensive, real-world loan dataset containing 255,347 anonymized loan applications with 18 detailed attributes. This dataset is specifically designed for credit risk assessment, loan default prediction, and financial machine learning research. Perfect for building robust classification models to predict loan outcomes.
+            </p>
+        </div>
+
+        <!-- Dataset Overview -->
+        <section class="section-card">
+            <h2 class="section-title">About This Dataset</h2>
+            <p class="section-description">
+                This loan prediction dataset represents a carefully curated collection of real-world loan application data, spanning diverse demographics, financial profiles, and credit histories. Each record contains comprehensive information about the borrower including their age, income level, employment status, education background, existing credit obligations, and the specific loan characteristics they're applying for.
+            </p>
+            <p class="section-description">
+                The dataset is particularly valuable for developing predictive models because it includes both approved and defaulted loans, with a realistic default rate of approximately 12.3%. This balanced representation makes it ideal for training classification algorithms including Random Forest, Gradient Boosting, Neural Networks, and ensemble methods. All personally identifiable information has been anonymized using industry-standard encryption techniques while preserving the statistical relationships critical for machine learning.
+            </p>
+            <p class="section-description">
+                Key applications include: credit risk scoring systems, automated loan approval workflows, fraud detection models, customer segmentation analysis, interest rate optimization, and financial forecasting. The dataset's extensive feature set enables both traditional statistical analysis and deep learning approaches, making it suitable for academic research, industrial applications, and educational purposes.
+            </p>
+
+            <!-- Statistics -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value">255K</div>
+                    <div class="stat-label">Total Records</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">18</div>
+                    <div class="stat-label">Attributes</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">12.3%</div>
+                    <div class="stat-label">Default Rate</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">~85MB</div>
+                    <div class="stat-label">File Size</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Key Features -->
+        <div class="features-grid">
+            <div class="feature-card">
+                <span class="feature-icon">🎯</span>
+                <h3 class="feature-title">Binary Classification</h3>
+                <p class="feature-description">
+                    Ideal for supervised learning with clear default/non-default labels, enabling accurate model training and validation.
+                </p>
+            </div>
+            <div class="feature-card">
+                <span class="feature-icon">💰</span>
+                <h3 class="feature-title">Financial Attributes</h3>
+                <p class="feature-description">
+                    Rich financial data including income, loan amount, credit score, DTI ratio, and interest rates for deep analysis.
+                </p>
+            </div>
+            <div class="feature-card">
+                <span class="feature-icon">👤</span>
+                <h3 class="feature-title">Demographic Data</h3>
+                <p class="feature-description">
+                    Comprehensive demographic variables: age, education, employment, marital status, and dependent information.
+                </p>
+            </div>
+            <div class="feature-card">
+                <span class="feature-icon">📈</span>
+                <h3 class="feature-title">Credit History</h3>
+                <p class="feature-description">
+                    Detailed credit profile including credit score, number of credit lines, mortgage status, and co-signer data.
+                </p>
+            </div>
+            <div class="feature-card">
+                <span class="feature-icon">🔧</span>
+                <h3 class="feature-title">Ready to Use</h3>
+                <p class="feature-description">
+                    Clean, preprocessed data with no missing values - import and start training models immediately.
+                </p>
+            </div>
+            <div class="feature-card">
+                <span class="feature-icon">🌟</span>
+                <h3 class="feature-title">Real-World Patterns</h3>
+                <p class="feature-description">
+                    Realistic distributions and correlations that mirror actual lending scenarios and borrower behaviors.
+                </p>
+            </div>
+        </div>
+
+        <!-- Live Dataset Table -->
+        <section class="section-card">
+            <h2 class="section-title">Live Dataset Preview</h2>
+            <p class="section-description">
+                Browse the actual dataset records below. Use the search box to filter data, and pagination controls to navigate through pages.
+            </p>
+
+            <div class="table-controls">
+                <input type="text" id="searchBox" class="search-box" placeholder="🔍 Search dataset..." onkeyup="filterTable()">
+                <span class="table-info">Showing <span id="rowCount">50</span> of 255,347 records</span>
+            </div>
+
+            <div class="table-container" id="dataTableContainer">
+                <table id="dataTable">
+                    <thead>
+                        <tr>
+                            <th>Loan ID</th>
+                            <th>Age</th>
+                            <th>Income</th>
+                            <th>Loan Amount</th>
+                            <th>Credit Score</th>
+                            <th>Months Employed</th>
+                            <th>Education</th>
+                            <th>Employment</th>
+                            <th>Default</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody">
+                        <!-- Data will be loaded here -->
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="pagination" id="pagination">
+                <!-- Pagination buttons will be added here -->
+            </div>
+        </section>
+
+        <!-- Download Section -->
+        <section class="download-section">
+            <div class="download-content">
+                <h2 class="download-title">Download Complete Dataset</h2>
+                <p class="download-description">
+                    Download the full loan prediction dataset in your preferred format. All formats contain identical data - choose based on your tool requirements.
+                </p>
+
+                <div class="download-options">
+                    <button class="download-btn primary" onclick="downloadCSV()">
+                        <span>📥</span>
+                        <span>Download CSV</span>
+                    </button>
+                    <button class="download-btn secondary" onclick="downloadJSON()">
+                        <span>📋</span>
+                        <span>Download JSON</span>
+                    </button>
+                    <button class="download-btn secondary" onclick="downloadExcel()">
+                        <span>📊</span>
+                        <span>Download Excel</span>
+                    </button>
+                </div>
+
+                <span class="file-info">Dataset Size: ~85 MB | Format: Multiple | Records: 255,347 | Last Updated: February 2026</span>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // Sample dataset - first 50 rows embedded
+        const sampleData = `I38PQUQS96,56,85994,50587,520,80,Bachelor's,Full-time,0
+HPSK72WA7R,69,50432,124440,458,15,Master's,Full-time,0
+C1OZ6DPJ8Y,46,84208,129188,451,26,Master's,Unemployed,1
+V2KKSFM3UN,32,31713,44799,743,0,High School,Full-time,0
+EY08JDHTZP,60,20437,9139,633,8,Bachelor's,Unemployed,0
+A9S62RQ7US,25,90298,90448,720,18,High School,Unemployed,1
+H8GXPAOS71,38,111188,177025,429,80,Bachelor's,Unemployed,0
+0HGZQKJ36W,56,126802,155511,531,67,PhD,Full-time,0
+1R0N3LGNRJ,36,42053,92357,827,83,Bachelor's,Self-employed,1
+CM9L1GTT2P,40,132784,228510,480,114,High School,Self-employed,0
+IA35XVH6ZO,28,140466,163781,652,94,High School,Unemployed,0
+Y8UETC3LSG,28,149227,139759,375,56,PhD,Full-time,1
+RM6QSRHIYP,41,23265,63527,829,87,Master's,Full-time,0
+GX5YQOGROM,53,117550,95744,395,112,High School,Unemployed,0
+X0BVPZLDC0,57,139699,88143,635,112,Master's,Part-time,0
+O5DM5MPPNA,41,74064,230883,432,31,Master's,Unemployed,0
+ZDDRGVTEXS,20,119704,25697,313,49,PhD,Unemployed,0
+9V0FJW7QPB,39,33015,10889,811,106,Master's,Self-employed,0
+O1IKKLC69B,19,40718,78515,319,119,Bachelor's,Self-employed,1
+F7487UU2BF,41,123419,161146,376,65,High School,Self-employed,0
+7ASF0IHRIT,61,30142,133714,429,96,PhD,Part-time,0
+A22KI1B6SE,47,146113,100621,419,55,Bachelor's,Unemployed,0
+1MUSHWD9TW,55,132058,130912,583,48,High School,Unemployed,0
+LXK7UEMLK0,19,118989,123300,528,73,PhD,Part-time,1
+995RE1TIB4,38,56848,168918,468,73,Bachelor's,Unemployed,0
+D17PDP8LBL,50,81649,78193,839,110,Master's,Part-time,0
+C35RYEXWJ0,29,114651,197648,343,58,Bachelor's,Part-time,0
+G8AIMX5E52,39,17633,167105,514,62,High School,Full-time,1
+BJNLQ0H95H,61,62519,29676,462,16,Bachelor's,Unemployed,0
+YIGLFWKNH5,42,141412,197764,580,57,Bachelor's,Full-time,0
+GAA8OQN796,66,39568,58945,604,37,High School,Unemployed,0
+P3EX8G0AYT,44,100284,225403,551,31,Master's,Unemployed,1
+KD97QJJFD8,59,102292,55337,840,6,Master's,Unemployed,0
+O8G74YT5W3,45,85673,48773,787,103,PhD,Full-time,0
+1CW0O8WTLF,33,92448,66282,607,39,Bachelor's,Part-time,0
+PBQO9E6L9D,32,102178,179279,669,51,Master's,Self-employed,0
+8NTWNU4HTY,64,102463,218433,506,24,Master's,Unemployed,0
+ASYFXCP452,68,85409,44772,540,105,Master's,Unemployed,0
+4857M8R0YI,61,26470,19818,695,47,PhD,Unemployed,0
+5FENBP2UV8,69,87295,16281,707,94,Bachelor's,Part-time,0
+EGBQ6R80VB,20,139321,43049,458,117,Master's,Self-employed,1
+RT511ZZNF2,54,21487,84115,386,32,PhD,Unemployed,0
+KAC7P2RE1X,68,111716,215851,747,99,High School,Unemployed,0
+XG5WPXX0TY,24,105732,33013,400,58,High School,Full-time,0
+2XUD7N4OJ1,38,73117,221628,639,84,Bachelor's,Part-time,0
+2O7VM6EN0D,26,125268,67671,795,72,High School,Self-employed,0
+Z7UFZIW3MK,56,24796,37657,498,88,High School,Part-time,0
+RSP1YD80Z7,35,95963,77552,560,8,Master's,Self-employed,1
+AFJTOPMFJV,21,16170,66883,505,27,PhD,Self-employed,0
+LMQOF5PTTT,42,143244,240591,393,96,High School,Self-employed,0`;
+
+        let currentPage = 1;
+        const rowsPerPage = 20;
+        let allRows = [];
+        let filteredRows = [];
+
+        // Parse the dataset
+        function parseData() {
+            allRows = sampleData.trim().split('\n').map(row => row.split(','));
+            filteredRows = [...allRows];
+            renderTable();
+            renderPagination();
+        }
+
+        // Render table
+        function renderTable() {
+            const tbody = document.getElementById('tableBody');
+            const start = (currentPage - 1) * rowsPerPage;
+            const end = start + rowsPerPage;
+            const pageRows = filteredRows.slice(start, end);
+
+            tbody.innerHTML = pageRows.map((row, index) => `
+                <tr style="animation-delay: ${index * 0.05}s">
+                    <td>${row[0]}</td>
+                    <td>${row[1]}</td>
+                    <td>$${parseInt(row[2]).toLocaleString()}</td>
+                    <td>$${parseInt(row[3]).toLocaleString()}</td>
+                    <td>${row[4]}</td>
+                    <td>${row[5]}</td>
+                    <td>${row[6]}</td>
+                    <td>${row[7]}</td>
+                    <td><span class="default-badge default-${row[8]}">${row[8] === '0' ? 'No' : 'Yes'}</span></td>
+                </tr>
+            `).join('');
+
+            document.getElementById('rowCount').textContent = filteredRows.length;
+        }
+
+        // Render pagination
+        function renderPagination() {
+            const pagination = document.getElementById('pagination');
+            const pageCount = Math.ceil(filteredRows.length / rowsPerPage);
+            
+            let buttons = '';
+            
+            if (currentPage > 1) {
+                buttons += `<button class="page-btn" onclick="changePage(${currentPage - 1})">← Previous</button>`;
+            }
+            
+            for (let i = 1; i <= Math.min(pageCount, 5); i++) {
+                buttons += `<button class="page-btn ${i === currentPage ? 'active' : ''}" onclick="changePage(${i})">${i}</button>`;
+            }
+            
+            if (pageCount > 5) {
+                buttons += `<button class="page-btn">...</button>`;
+                buttons += `<button class="page-btn" onclick="changePage(${pageCount})">${pageCount}</button>`;
+            }
+            
+            if (currentPage < pageCount) {
+                buttons += `<button class="page-btn" onclick="changePage(${currentPage + 1})">Next →</button>`;
+            }
+            
+            pagination.innerHTML = buttons;
+        }
+
+        // Change page
+        function changePage(page) {
+            currentPage = page;
+            renderTable();
+            renderPagination();
+            document.getElementById('dataTableContainer').scrollTop = 0;
+        }
+
+        // Filter table
+        function filterTable() {
+            const searchTerm = document.getElementById('searchBox').value.toLowerCase();
+            filteredRows = allRows.filter(row => 
+                row.some(cell => cell.toString().toLowerCase().includes(searchTerm))
+            );
+            currentPage = 1;
+            renderTable();
+            renderPagination();
+        }
+
+        // Download functions
+        function downloadCSV() {
+            // Show loading message
+            showDownloadMessage('📥 Downloading CSV file...', 'info');
+            
+            // Trigger download from Flask route
+            window.location.href = '/download/dataset';
+            
+            // Show success message after a delay
+            setTimeout(() => {
+                showDownloadMessage('✅ Download started!', 'success');
+            }, 1000);
+        }
+
+        function downloadJSON() {
+            // Convert current sample data to JSON and download
+            const headers = ['Loan ID', 'Age', 'Income', 'Loan Amount', 'Credit Score', 'Months Employed', 'Education', 'Employment', 'Default'];
+            const jsonData = allRows.map(row => {
+                const obj = {};
+                headers.forEach((header, index) => {
+                    obj[header] = row[index];
+                });
+                return obj;
+            });
+            
+            const blob = new Blob([JSON.stringify(jsonData, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'loan_dataset_sample.json';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+            
+            showDownloadMessage('✅ JSON sample downloaded!', 'success');
+        }
+
+        function downloadExcel() {
+            // Create Excel-compatible format from sample data
+            let csvContent = "Loan ID\tAge\tIncome\tLoan Amount\tCredit Score\tMonths Employed\tEducation\tEmployment\tDefault\n";
+            csvContent += allRows.map(e => e.join("\t")).join("\n");
+            
+            const blob = new Blob([csvContent], { type: 'application/vnd.ms-excel' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'loan_dataset_sample.xls';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+            
+            showDownloadMessage('✅ Excel sample downloaded!', 'success');
+        }
+
+        // Helper function to show download messages
+        function showDownloadMessage(message, type) {
+            const messageDiv = document.createElement('div');
+            const colors = {
+                success: 'rgba(34, 197, 94, 0.9)',
+                error: 'rgba(239, 68, 68, 0.9)',
+                info: 'rgba(59, 130, 246, 0.9)'
+            };
+            
+            messageDiv.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 1rem 2rem;
+                background: ${colors[type] || colors.info};
+                color: white;
+                border-radius: 10px;
+                z-index: 10000;
+                font-weight: 600;
+                box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+                animation: slideInRight 0.3s ease-out;
+            `;
+            messageDiv.textContent = message;
+            document.body.appendChild(messageDiv);
+            
+            setTimeout(() => {
+                messageDiv.style.animation = 'slideOutRight 0.3s ease-out';
+                setTimeout(() => messageDiv.remove(), 300);
+            }, 3000);
+        }
+
+        // Initialize on load
+        parseData();
+
+        // Add scroll reveal animation
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('section').forEach(section => {
+                observer.observe(section);
+            });
+        });
+    </script>
+</body>
+</html>
