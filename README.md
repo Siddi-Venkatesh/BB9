@@ -31,7 +31,8 @@ On top of the individual models, the work also develops **ensemble versions of D
 ---
 
 ## Paper Reference (Inspiration)
-👉 **Machine Learning and Deep Learning for Loan Prediction in Banking: Exploring Ensemble Methods and Data Balancing
+👉 **Machine Learning and Deep Learning for Loan Prediction in Banking:
+   -Exploring Ensemble Methods and Data Balancing
  ([Paper Link]([https://ieeexplore.ieee.org/document/10985749](https://ieeexplore.ieee.org/document/10772107)))**
 
 ---
